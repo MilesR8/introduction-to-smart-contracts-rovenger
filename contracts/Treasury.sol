@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "openzeppelin-contracts/contracts/access/Ownable.sol";
+import "lib/openzeppelin-contracts/contracts/access/Ownable.sol";
+import "contracts/Keeper.sol";
 
 
 /*
@@ -44,7 +45,6 @@ contract Treasury is Ownable {
         (bool send, ) = msg.sender.call{value: balance}("");
         require(send, "To owner: Failed to send Ether");
     }
-
 
     // Function to get the contract balance
     function getBalance() external view returns (uint256) {
