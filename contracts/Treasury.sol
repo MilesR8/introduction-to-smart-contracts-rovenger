@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "openzeppelin-contracts/contracts/access/Ownable.sol";
-import "./TokenPayable.sol";
+import "lib/openzeppelin-contracts/contracts/access/Ownable.sol";
+import "contracts/Keeper.sol";
+
 
 /*
   By default, the owner of an Ownable contract is the account that deployed it.
