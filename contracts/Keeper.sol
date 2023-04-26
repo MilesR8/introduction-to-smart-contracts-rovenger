@@ -3,6 +3,7 @@ pragma solidity ^0.8.4;
 
 import "contracts/Treasury.sol";
 
+
 contract Keeper{
 
     struct Player{
@@ -16,7 +17,7 @@ contract Keeper{
 
     mapping (address => Player) public playerList;
     
-    function getPlayer(address _addr) external view returns (Player memory) {
+    function getPlayer(address _addr) external view returns (Player memory){
         return playerList[_addr];
     }
 
@@ -26,6 +27,14 @@ contract Keeper{
             Player memory x = Player(n, false, 0, 0, true);
             playerList[msg.sender] = x;
         }
+    }
+
+    function changeName(string memory newName) external{
+        playerList[msg.sender].name = newName;
+    }
+
+    function banPlayer(address add) external{
+        playerList[add].banned = true;
     }
 
     function addWin() external{
@@ -38,6 +47,10 @@ contract Keeper{
 
     function getWins() external view returns (uint256) {
         return playerList[msg.sender].wins;
+    }
+
+    function getName() external view returns (string memory) {
+        return playerList[msg.sender].name;
     }
 
     function getLosses() external view returns (uint256) {
