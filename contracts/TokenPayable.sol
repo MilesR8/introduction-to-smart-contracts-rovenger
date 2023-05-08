@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
-
-import "openzeppelin-contracts/contracts/access/Ownable.sol";
-import "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.3.2/contracts/access/Ownable.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.3.2/contracts/token/ERC20/IERC20.sol";
+//import "openzeppelin-contracts/contracts/access/Ownable.sol";
+//import "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 
 /*
   By default, the owner of an Ownable contract is the account that deployed it.

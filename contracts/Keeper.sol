@@ -2,9 +2,16 @@
 pragma solidity ^0.8.4;
 
 import "contracts/Treasury.sol";
-import "ipfs-http-client/Interfaces.sol";
+import "contracts/IIPFSClient.sol"; // Import the IIPFSClient interface
 
 contract Keeper{
+
+    event PlayerDataRequest(address playerAddress);
+    event PlayerAdded(address playerAddress, string name, string ipfsHash);
+    event PlayerNameChanged(address playerAddress, string newName);
+    event PlayerBanned(address playerAddress);
+    event PlayerWinAdded(address playerAddress);
+    event PlayerLossAdded(address playerAddress);
 
     struct Player{
         string name;
@@ -17,10 +24,10 @@ contract Keeper{
 
     mapping (address => Player) public playerList;
     
-    IPFSHTTPClient ipfs;
+    IIPFSClient ipfs;
 
     constructor(address _ipfsAddress) {
-        ipfs = IPFSHTTPClient(_ipfsAddress);
+        ipfs = IIPFSClient(_ipfsAddress);
     }
 
     function getPlayer(address _addr) external view returns (Player memory){

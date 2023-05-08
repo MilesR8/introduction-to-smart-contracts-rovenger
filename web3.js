@@ -3,9 +3,198 @@ const IPFS = require("ipfs-http-client");
 
 const ipfs = IPFS.create({ host: "ipfs.infura.io", port: 5001, protocol: "https" });
 
-const web3 = new Web3("https://your-ethereum-node-url");
-const contractABI = []; // ABI generated from your Keeper contract
-const contractAddress = "0x..."; // Your deployed Keeper contract address
+const web3 = new Web3("https://goerli.infura.io/v3/");
+const contractABI = [
+	{
+		"inputs": [],
+		"name": "addLoss",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "n",
+				"type": "string"
+			}
+		],
+		"name": "addPlayer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "addWin",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "add",
+				"type": "address"
+			}
+		],
+		"name": "banPlayer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "newName",
+				"type": "string"
+			}
+		],
+		"name": "changeName",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_ipfsAddress",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [],
+		"name": "getLosses",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getName",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_addr",
+				"type": "address"
+			}
+		],
+		"name": "getPlayer",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "banned",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "wins",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "losses",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "isInstanced",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct Keeper.Player",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getWins",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "playerList",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "banned",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "wins",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "losses",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "isInstanced",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]; // ABI generated from your Keeper contract
+const contractAddress = "0xd9145CCE52D386f254917e481eB44e9943F39138"; // Your deployed Keeper contract address
 
 const keeperContract = new web3.eth.Contract(contractABI, contractAddress);
 
@@ -46,7 +235,7 @@ keeperContract.events.PlayerAdded({}, async (error, event) => {
     return;
   }
 
-  const { playerAddress, name } = event.returnValues;
+  const { playerAddress, name, ipfsHash } = event.returnValues;
   const playerData = {
     name,
     banned: false,
@@ -55,8 +244,11 @@ keeperContract.events.PlayerAdded({}, async (error, event) => {
   };
 
   const cid = await addToIPFS(playerData);
+  // Call the addPlayer function with the generated IPFS hash.
+  await keeperContract.methods.addPlayer(name, cid).send({ from: playerAddress });
   console.log(`Player data for ${playerAddress} added to IPFS with CID: ${cid}`);
 });
+
 
 keeperContract.events.PlayerNameChanged({}, async (error, event) => {
   if (error) {

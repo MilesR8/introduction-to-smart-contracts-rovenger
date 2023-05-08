@@ -15,3 +15,11 @@
 
 * Run the code by executing the following command in the command line:
 * `node index.js`
+
+
+* Install Node.js and npm (if you haven't already): https://nodejs.org/
+* Install the Solidity compiler: npm install -g solc
+* Install Ganache CLI (for local Ethereum node): npm install -g ganache-cli
+* Create a new directory for your project: mkdir my_project && cd my_project
+* Initialize a new Node.js project: npm init -y
+* Install the web3.js library: npm install web3
