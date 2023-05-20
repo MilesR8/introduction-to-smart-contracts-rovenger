@@ -45,4 +45,4 @@ This project is licensed under the MIT License. See the LICENSE file for more in
 
 ## Video
 
-Please find the video of the project [here] 
+Please find the video of the project here: https://drive.google.com/file/d/18qz7-ALdymmoPSFr8DMkgvZG7Tbt1poj/view?usp=sharing
